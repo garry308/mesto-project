@@ -1,0 +1,21 @@
+.cards__like {
+  width: 29px;
+  background-image: url(/images/like-disabled.svg);
+  background-repeat: no-repeat;
+  background-size: 22px;
+  background-position: center;
+}
+
+.cards__like:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.cards__like_active {
+  background-image: url(/images/like-active.svg);
+}
+
+.cards__like_active:hover {
+  opacity: 1;
+  cursor: pointer;
+}

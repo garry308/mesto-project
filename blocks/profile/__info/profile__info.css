@@ -1,0 +1,25 @@
+.profile__info {
+  max-width: 282px;
+  display: grid;
+  grid-template-columns: 1fr 18px;
+  row-gap: 14px;
+  column-gap: 10px;
+  margin-bottom: 36px;
+  grid-template-areas: "name button" "bio bio";
+}
+
+@media (min-width:900px) {
+  .profile__info {
+    max-width: 500px;
+    margin-left: 25px;
+    margin-bottom: 0;
+    column-gap: 18px;
+    row-gap: 10px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+  .profile__info {
+    max-width: 300px;
+  }
+}
