@@ -1,10 +1,10 @@
 .popup__container {
+  display: none;
   position: absolute;
   top: 50%;
   left: 50%;
   margin-left: -220px;
   margin-top: -165px;
-  display: block;
   width: 440px;
   height: 330px;
   background-color: white;
@@ -19,3 +19,4 @@
     margin-top: -161px;
   }
 }
+

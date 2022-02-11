@@ -21,62 +21,40 @@
     <button title="Добавить фотографию" type="button" class="profile__add-button"></button>
   </section>
   <section class="cards">
-    <div class="cards__card">
-      <img src="./images/karachaevsk.jpg" class="cards__image" alt="Карачаевск">
-      <div class="cards__info">
-        <p class="cards__name">Карачаевск</p>
-        <button type="button" title="Мне нравится" class="cards__like"></button>
+    <template id="card">
+      <div class="cards__card">
+        <img src="" class="cards__image" alt="">
+        <button type="button" title="Удалить" class="cards__delete-icon"></button>
+        <div class="cards__info">
+         <p class="cards__name"></p>
+         <button type="button" title="Мне нравится" class="cards__like"></button>
+        </div>
       </div>
-    </div>
-    <div class="cards__card">
-      <img src="./images/elbrus.jpg" class="cards__image" alt="Гора Эльбрус">
-      <div class="cards__info">
-        <p class="cards__name">Гора Эльбрус</p>
-        <button type="button" title="Мне нравится" class="cards__like cards__like_active"></button>
-      </div>
-    </div>
-    <div class="cards__card">
-      <img src="./images/dombai.jpg" class="cards__image" alt="Домбай">
-      <div class="cards__info">
-        <p class="cards__name">Домбай</p>
-        <button type="button" title="Мне нравится" class="cards__like"></button>
-      </div>
-    </div>
-    <div class="cards__card">
-      <img src="./images/elbrus.jpg" class="cards__image" alt="Гора Эльбрус">
-      <div class="cards__info">
-        <p class="cards__name">Гора Эльбрус</p>
-        <button type="button" title="Мне нравится" class="cards__like"></button>
-      </div>
-    </div>
-    <div class="cards__card">
-      <img src="./images/dombai.jpg" class="cards__image" alt="Домбай">
-      <div class="cards__info">
-        <p class="cards__name">Домбай</p>
-        <button type="button" title="Мне нравится" class="cards__like"></button>
-      </div>
-    </div>
-    <div class="cards__card">
-      <img src="./images/karachaevsk.jpg" class="cards__image" alt="Карачаево-Черкесия">
-      <div class="cards__info">
-        <p class="cards__name">Карачаево-Черкесия</p>
-        <button type="button" title="Мне нравится" class="cards__like"></button>
-      </div>
-    </div>
+    </template>
   </section>
   <footer class="footer">
     <div class="footer__copyright">© 2022 Mesto Russia</div>
   </footer>
   <div class="popup">
-    <form name="popup-profile" class="popup__container">
+    <form name="profile" class="popup__container">
       <h2 class="popup__title">Редактировать профиль</h2>
       <fieldset class="popup__inputs">
-        <input type="text" class="popup__input" value="Жак-Ив Кусто">
-        <input type="text" class="popup__input" value="Исследователь океана">
+        <input type="text" class="popup__input popup__name" value="Жак-Ив Кусто">
+        <input type="text" class="popup__input popup__bio" value="Исследователь океана">
         <button title="Cохранить изменения" type="submit" class="popup__save-button">Сохранить</button>
       </fieldset>
       <button title="Закрыть" type="button" class="popup__close-icon"></button>
     </form>
+    <form name="addcard" class="popup__container">
+      <h2 class="popup__title">Новое место</h2>
+      <fieldset class="popup__inputs">
+        <input type="text" class="popup__input popup__name" placeholder="Название">
+        <input type="text" class="popup__input popup__bio" placeholder="Ссылка на картинку">
+        <button title="Создать" type="submit" class="popup__save-button">Создать</button>
+      </fieldset>
+      <button title="Закрыть" type="button" class="popup__close-icon"></button>
+    </form>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>
