@@ -10,8 +10,6 @@ const nameInput = formProfile.querySelector('.popup__name');
 const bioInput = formProfile.querySelector('.popup__bio');
 const editButton = page.querySelector('.profile__edit-button');
 const addCardButton = page.querySelector('.profile__add-button');
-const saveInfoButton = formProfile.querySelector('.popup__save-button');
-const saveCardButton = formCard.querySelector('popup__save-button');
 const closeInfoPopup = formProfile.querySelector('.popup__close-icon');
 const closeCardPopup = formCard.querySelector('.popup__close-icon');
 const closeFsPopup = fsPopup.querySelector('.popup__close-icon');
@@ -43,15 +41,6 @@ const initialCards = [
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
 ];
-
-editButton.addEventListener('click', editButtonClick);
-addCardButton.addEventListener('click', addButtonClick);
-closeInfoPopup.addEventListener('click', closeInfo);
-closeCardPopup.addEventListener('click', closeCard);
-closeFsPopup.addEventListener('click', fsPopupToggle);
-formProfile.addEventListener('submit', postProfileInfo);
-formCard.addEventListener('submit', postCard);
-
 
 function editButtonClick() {
   popupToggle();
@@ -135,3 +124,10 @@ function postCard (evt) {
 }
 
 initialCards.forEach(loadDefaultCard);
+editButton.addEventListener('click', editButtonClick);
+addCardButton.addEventListener('click', addButtonClick);
+closeInfoPopup.addEventListener('click', closeInfo);
+closeCardPopup.addEventListener('click', closeCard);
+closeFsPopup.addEventListener('click', fsPopupToggle);
+formProfile.addEventListener('submit', postProfileInfo);
+formCard.addEventListener('submit', postCard);
