@@ -1,14 +1,17 @@
 .popup__container {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
   position: absolute;
   top: 50%;
   left: 50%;
   margin-left: -220px;
   margin-top: -165px;
-  display: block;
   width: 440px;
   height: 330px;
   background-color: white;
   border-radius: 10px;
+  transition: visibility .5s linear, opacity .5s linear;
 }
 
 @media (max-width: 540px) {
