@@ -96,7 +96,7 @@ function postProfileInfo(evt) {
   evt.preventDefault();
   mainPageName.textContent = nameInput.value;
   mainPageBio.textContent = bioInput.value;
-  popupToggle();
+  closeInfo();
 }
 
 function showFullScreen(evt) {
