@@ -90,7 +90,6 @@ function postProfileInfo(evt) {
 
 function showFullScreen(evt) {
   fsPopupToggle();
-  console.log(evt);
   fsContainer.querySelector('.popup__image').src = evt.target.currentSrc;
   fsContainer.querySelector('.popup__cardname').textContent = evt.target.alt;
 }
