@@ -1,0 +1,11 @@
+.popup__fullscreen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  flex-direction: column;
+  transition: visibility .5s linear, opacity .5s linear;
+}
