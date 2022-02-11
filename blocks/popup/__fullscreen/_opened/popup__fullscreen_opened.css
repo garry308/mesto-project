@@ -1,0 +1,4 @@
+.popup__fullscreen_opened {
+  opacity: 1;
+  visibility: visible;
+}

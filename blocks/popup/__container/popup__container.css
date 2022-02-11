@@ -1,5 +1,7 @@
 .popup__container {
-  display: none;
+  display: block;
+  visibility: hidden;
+  opacity: 0;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -9,6 +11,7 @@
   height: 330px;
   background-color: white;
   border-radius: 10px;
+  transition: visibility .5s linear, opacity .5s linear;
 }
 
 @media (max-width: 540px) {
@@ -19,4 +22,3 @@
     margin-top: -161px;
   }
 }
-
