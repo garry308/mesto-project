@@ -1,18 +1,26 @@
 const page = document.querySelector('.page');
-const mainPageName = page.querySelector('.profile__name');
-const mainPageBio = page.querySelector('.profile__bio');
-const fsPopup = page.querySelector('.popup_fullscreen');
+
+const fsPopup = page.querySelector('.popup_fs');
+const closeFsPopup = fsPopup.querySelector('.popup__close-icon');
+const imageFsPopup = fsPopup.querySelector('.popup__image');
+const nameFsPopup = fsPopup.querySelector('.popup__cardname');
+
 const cardPopup = page.querySelector('.newcard_popup');
 const cardNameInput =  cardPopup.querySelector('.popup__name');
 const cardLinkInput =  cardPopup.querySelector('.popup__bio');
+const closeCardPopup = cardPopup.querySelector('.popup__close-icon');
+
 const profilePopup = page.querySelector('.profile_popup');
 const profileNameInput =  profilePopup.querySelector('.popup__name');
 const profileBioInput =  profilePopup.querySelector('.popup__bio');
-const closeFsPopup = fsPopup.querySelector('.popup__close-icon');
-const closeCardPopup = cardPopup.querySelector('.popup__close-icon');
 const closeProfilePopup = profilePopup.querySelector('.popup__close-icon');
+
+const mainPageName = page.querySelector('.profile__name');
+const mainPageBio = page.querySelector('.profile__bio');
+
 const editButton = page.querySelector('.profile__edit-button');
 const addCardButton = page.querySelector('.profile__add-button');
+
 const cardTemplate = page.querySelector('#card').content;
 const cardsContainer = page.querySelector('.cards');
 const initialCards = [
@@ -52,8 +60,8 @@ function closePopup(popup) {
 
 function showProfilePopup() {
   openPopup(profilePopup);
-  profilePopup.querySelector('.popup__name').value = mainPageName.textContent;
-  profilePopup.querySelector('.popup__bio').value = mainPageBio.textContent;
+  profileNameInput.value = mainPageName.textContent;
+  profileBioInput.value = mainPageBio.textContent;
 }
 
 function showCardPopup() {
@@ -75,19 +83,19 @@ function createCard(item) {
   newCard.querySelector('.cards__name').textContent = item['name'];
   newCard.querySelector('.cards__image').alt = item['name'];
   newCard.querySelector('.cards__image').addEventListener('click', showFullScreen);
-  newCard.querySelector('.cards__like').addEventListener('click', likeToggle);
+  newCard.querySelector('.cards__like').addEventListener('click', toggleLike);
   newCard.querySelector('.cards__delete-icon').addEventListener('click', deleteCard);
 return newCard;
 }
 
 function showFullScreen(evt) {
   openPopup(fsPopup);
-  fsPopup.querySelector('.popup__image').src = evt.target.currentSrc;
-  fsPopup.querySelector('.popup__image').alt = evt.target.alt;
-  fsPopup.querySelector('.popup__cardname').textContent = evt.target.alt;
+  imageFsPopup.src = evt.target.currentSrc;
+  imageFsPopup.alt = evt.target.alt;
+  nameFsPopup.textContent = evt.target.alt;
 }
 
-function likeToggle(evt) {
+function toggleLike(evt) {
   evt.target.classList.toggle('cards__like_active');
 }
 
