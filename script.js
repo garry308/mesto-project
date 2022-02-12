@@ -71,6 +71,9 @@ function postProfileInfo(evt) {
 
 function createCard(item) {
   const newCard = cardTemplate.cloneNode(true);
+  newCard.querySelector('.cards__image').src = item['link'];
+  newCard.querySelector('.cards__name').textContent = item['name'];
+  newCard.querySelector('.cards__image').alt = item['name'];
   newCard.querySelector('.cards__image').addEventListener('click', showFullScreen);
   newCard.querySelector('.cards__like').addEventListener('click', likeToggle);
   newCard.querySelector('.cards__delete-icon').addEventListener('click', deleteCard);
@@ -88,12 +91,8 @@ function likeToggle(evt) {
   evt.target.classList.toggle('cards__like_active');
 }
 
-
 function loadDefaultCard (card) {
-  const newCard = createCard();
-  newCard.querySelector('.cards__image').src = card['link'];
-  newCard.querySelector('.cards__image').alt = card['name'];
-  newCard.querySelector('.cards__name').textContent = card['name'];
+  const newCard = createCard(card);
   cardsContainer.prepend(newCard);
 }
 
@@ -103,10 +102,11 @@ function deleteCard (btnevt) {
 
 function postCard (evt) {
   evt.preventDefault();
-  const newCard = createCard();
-  newCard.querySelector('.cards__name').textContent = cardNameInput.value;
-  newCard.querySelector('.cards__image').src = cardLinkInput.value;
-  newCard.querySelector('.cards__image').alt = cardNameInput.value;
+  const item = [];
+  item['name'] = cardNameInput.value;
+  item['link'] = cardLinkInput.value;
+  console.log(item);
+  const newCard = createCard(item);
   cardsContainer.prepend(newCard);
   closePopup(cardPopup);
 }
