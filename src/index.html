@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles/index.css">
     <title>Mesto</title>
 </head>
 <body class="page">
   <header class="header">
-    <img src="./images/mesto_header.svg" alt="Место" class="header__logo">
+    <img src="<%=require('./images/mesto_header.svg')%>" alt="Место" class="header__logo">
   </header>
   <section class="profile">
-    <img src="./images/main-photo.jpg" alt="Фото профиля" class="profile__photo">
+    <img src="<%=require('./images/main-photo.jpg')%>" alt="Фото профиля" class="profile__photo">
     <div class="profile__info">
       <h1 class="profile__name">Жак-Ив Кусто</h1>
       <button title="Редактировать профиль" type="button" class="profile__edit-button"></button>
@@ -39,9 +38,11 @@
     <form name="profile" class="popup__container">
       <h2 class="popup__title">Редактировать профиль</h2>
       <fieldset class="popup__inputs">
-        <input type="text" class="popup__input popup__name" value="">
-        <input type="text" class="popup__input popup__bio" value="">
-        <button title="Cохранить изменения" type="submit" class="popup__save-button">Сохранить</button>
+        <input type="text" class="popup__input popup__name" id="name" value="Имя профиля" minlength="2" maxlength="40" required>
+        <span class="popup__input-error name-input-error">Текст ошибки</span>
+        <input type="text" class="popup__input popup__bio" id="bio" value="Описание профиля" minlength="2" maxlength="200" required>
+        <span class="popup__input-error bio-input-error">Текст ошибки</span>
+        <button title="Cохранить изменения" type="submit" class="popup__save-button popup__save-button_active">Сохранить</button>
       </fieldset>
       <button title="Закрыть" type="button" class="popup__close-icon"></button>
     </form>
@@ -50,9 +51,11 @@
     <form name="addcard" class="popup__container">
       <h2 class="popup__title">Новое место</h2>
       <fieldset class="popup__inputs">
-        <input type="text" class="popup__input popup__name" value="" placeholder="Название">
-        <input type="text" class="popup__input popup__bio" value="" placeholder="Ссылка на картинку">
-        <button title="Создать" type="submit" class="popup__save-button">Создать</button>
+        <input type="text" class="popup__input popup__name" id="placename" value="" placeholder="Название" minlength="2" maxlength="30" required>
+        <span class="popup__input-error placename-input-error">Текст ошибки</span>
+        <input type="url" class="popup__input popup__bio" id="link" value="" placeholder="Ссылка на картинку" required>
+        <span class="popup__input-error link-input-error">Текст ошибки</span>
+        <button title="Создать" type="submit" disabled class="popup__save-button">Создать</button>
       </fieldset>
       <button title="Закрыть" type="button" class="popup__close-icon"></button>
     </form>
@@ -64,6 +67,5 @@
       <button title="Закрыть" type="button" class="popup__close-icon"></button>
     </div>
   </div>
-  <script src="script.js"></script>
 </body>
 </html>
