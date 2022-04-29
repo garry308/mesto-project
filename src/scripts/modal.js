@@ -1,20 +1,6 @@
-import {openPopup, closePopup } from "./utils.js";
-import {page, profilePopup, cardPopup, profileNameInput, profileBioInput,
-   cardNameInput, cardLinkInput, mainPageName, mainPageBio, } from "./index.js";
+import {page, fsPopup, imageFsPopup, nameFsPopup } from "./utils.js";
 
-export function showProfilePopup() {
-  openPopup(profilePopup);
-  profileNameInput.value = mainPageName.textContent;
-  profileBioInput.value = mainPageBio.textContent;
-}
-
-export function showCardPopup() {
-  openPopup(cardPopup);
-  cardNameInput.value = "";
-  cardLinkInput.value = "";
-}
-
-export function MouseClosePopup(evt) {
+export function mouseClosePopup(evt) {
   if (evt.target.classList.contains('popup_opened')) {
     closePopup(page.querySelector('.popup_opened'));
   }
@@ -26,11 +12,16 @@ export function keyClosePopup(evt) {
   }
 }
 
-export function postProfileInfo(evt) {
-  evt.preventDefault();
-  mainPageName.textContent = profileNameInput.value;
-  mainPageBio.textContent = profileBioInput.value;
-  closePopup(profilePopup);
+export function openPopup(popup) {
+  popup.classList.add('popup_opened');
+  page.addEventListener('keydown', keyClosePopup);
+  page.addEventListener('mousedown', mouseClosePopup);
+}
+
+export function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+  page.removeEventListener('keydown', keyClosePopup);
+  page.removeEventListener('mousedown', mouseClosePopup);
 }
 
 export function showFullScreen(evt) {
