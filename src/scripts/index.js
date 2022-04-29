@@ -1,58 +1,46 @@
 import '../styles/index.css';
-import {enableValidation} from './validate.js';
-import {loadDefaultCard, postCard} from './card.js';
-import {showProfilePopup, showCardPopup, MouseClosePopup,
-  keyClosePopup, postProfileInfo} from './modal.js';
-import {closePopup} from "./utils.js";
-export const page = document.querySelector('.page');
-export const fsPopup = page.querySelector('.popup_fs');
+import { enableValidation} from './validate.js';
+import { loadDefaultCard, createCard} from './card.js';
+import { openPopup, closePopup} from './modal.js';
+import { initialCards, profilePopup, cardPopup, fsPopup, page, cardNameInput,
+  cardsContainer, cardLinkInput, profileNameInput, profileBioInput, mainPageName,
+  mainPageBio} from './utils.js';
+
 export const closeFsPopup = fsPopup.querySelector('.popup__close-icon');
-export const imageFsPopup = fsPopup.querySelector('.popup__image');
-export const nameFsPopup = fsPopup.querySelector('.popup__cardname');
-
-export const cardPopup = page.querySelector('.newcard_popup');
-export const cardNameInput =  cardPopup.querySelector('.popup__name');
-export const cardLinkInput =  cardPopup.querySelector('.popup__bio');
 export const closeCardPopup = cardPopup.querySelector('.popup__close-icon');
-
-export const profilePopup = page.querySelector('.profile_popup');
-export const profileNameInput =  profilePopup.querySelector('.popup__name');
-export const profileBioInput =  profilePopup.querySelector('.popup__bio');
 export const closeProfilePopup = profilePopup.querySelector('.popup__close-icon');
-
-export const mainPageName = page.querySelector('.profile__name');
-export const mainPageBio = page.querySelector('.profile__bio');
-
 export const editButton = page.querySelector('.profile__edit-button');
 export const addCardButton = page.querySelector('.profile__add-button');
-export const cardTemplate = page.querySelector('#card').content;
-export const cardsContainer = page.querySelector('.cards');
-export const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
+
+export function postCard (evt) {
+  evt.preventDefault();
+  const item = [];
+  item['name'] = cardNameInput.value;
+  item['link'] = cardLinkInput.value;
+  const newCard = createCard(item);
+  cardsContainer.prepend(newCard);
+  closePopup(cardPopup);
+  evt.submitter.classList.remove('popup__save-button_active');
+  cardNameInput.value = "";
+  cardLinkInput.value = "";
+}
+
+export function showProfilePopup() {
+  openPopup(profilePopup);
+  profileNameInput.value = mainPageName.textContent;
+  profileBioInput.value = mainPageBio.textContent;
+}
+
+export function showCardPopup() {
+  openPopup(cardPopup);
+}
+
+export function postProfileInfo(evt) {
+  evt.preventDefault();
+  mainPageName.textContent = profileNameInput.value;
+  mainPageBio.textContent = profileBioInput.value;
+  closePopup(profilePopup);
+}
 
 (function () {
   initialCards.forEach(loadDefaultCard);
@@ -63,9 +51,6 @@ export const initialCards = [
   closeFsPopup.addEventListener('click', () => {closePopup(fsPopup);});
   profilePopup.addEventListener('submit', postProfileInfo);
   cardPopup.addEventListener('submit', postCard);
-
-  page.addEventListener('keydown', keyClosePopup);
-  page.addEventListener('mousedown', MouseClosePopup);
 
   enableValidation({
     formList: '.popup__container',
