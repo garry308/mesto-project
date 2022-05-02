@@ -13,9 +13,9 @@
   <section class="profile">
     <img src="<%=require('./images/main-photo.jpg')%>" alt="Фото профиля" class="profile__photo">
     <div class="profile__info">
-      <h1 class="profile__name">Жак-Ив Кусто</h1>
+      <h1 class="profile__name">Имя профиля</h1>
       <button title="Редактировать профиль" type="button" class="profile__edit-button"></button>
-      <p class="profile__bio">Исследователь океана</p>
+      <p class="profile__bio">Описание профиля</p>
     </div>
     <button title="Добавить фотографию" type="button" class="profile__add-button"></button>
   </section>
@@ -26,7 +26,10 @@
         <button type="button" title="Удалить" class="cards__delete-icon"></button>
         <div class="cards__info">
          <p class="cards__name"></p>
-         <button type="button" title="Мне нравится" class="cards__like"></button>
+         <div class="cards__likes">
+            <button type="button" title="Мне нравится" class="cards__like"></button>
+            <p class="cards__like-count">0</p>
+         </div>
         </div>
       </div>
     </template>

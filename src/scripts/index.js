@@ -2,9 +2,9 @@ import '../styles/index.css';
 import { enableValidation} from './validate.js';
 import { loadDefaultCard, createCard} from './card.js';
 import { openPopup, closePopup} from './modal.js';
-import { initialCards, profilePopup, cardPopup, fsPopup, page, cardNameInput,
+import { profilePopup, cardPopup, fsPopup, page, cardNameInput,
   cardsContainer, cardLinkInput, profileNameInput, profileBioInput, mainPageName,
-  mainPageBio} from './utils.js';
+  mainPageBio, mainPagePhoto} from './utils.js';
 
 export const closeFsPopup = fsPopup.querySelector('.popup__close-icon');
 export const closeCardPopup = cardPopup.querySelector('.popup__close-icon');
@@ -14,15 +14,26 @@ export const addCardButton = page.querySelector('.profile__add-button');
 
 export function postCard (evt) {
   evt.preventDefault();
-  const item = [];
-  item['name'] = cardNameInput.value;
-  item['link'] = cardLinkInput.value;
-  const newCard = createCard(item);
-  cardsContainer.prepend(newCard);
-  closePopup(cardPopup);
-  evt.submitter.classList.remove('popup__save-button_active');
-  cardNameInput.value = "";
-  cardLinkInput.value = "";
+  fetch('https://nomoreparties.co/v1/plus-cohort-9/cards ', {
+  method: 'POST',
+  headers: {
+    authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: cardNameInput.value,
+    link: cardLinkInput.value
+  })
+})
+  .then(res => res.json())
+  .then((result) => {
+    const newCard = createCard(result);
+    cardsContainer.prepend(newCard);
+    closePopup(cardPopup);
+    evt.submitter.classList.remove('popup__save-button_active');
+    cardNameInput.value = "";
+    cardLinkInput.value = "";
+  });
 }
 
 export function showProfilePopup() {
@@ -37,13 +48,50 @@ export function showCardPopup() {
 
 export function postProfileInfo(evt) {
   evt.preventDefault();
+  fetch('https://nomoreparties.co/v1/plus-cohort-9/users/me', {
+  method: 'PATCH',
+  headers: {
+    authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: profileNameInput.value,
+    about: profileBioInput.value
+  })
+})
+  .then(res => res.json())
+  .then((result) => {
+    console.log(result);
+  });
   mainPageName.textContent = profileNameInput.value;
   mainPageBio.textContent = profileBioInput.value;
   closePopup(profilePopup);
 }
 
 (function () {
-  initialCards.forEach(loadDefaultCard);
+  // загрузка профиля
+  fetch('https://nomoreparties.co/v1/plus-cohort-9/users/me', {
+    headers: {
+      authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9'
+    }
+  })
+    .then(res => res.json())
+    .then((result) => {
+      mainPageName.textContent = result.name;
+      mainPageName.setAttribute('id', result._id);
+      mainPageBio.textContent = result.about;
+      mainPagePhoto.src = result.avatar;
+    });
+  // загрузка карточек
+  fetch('https://nomoreparties.co/v1/plus-cohort-9/cards', {
+    headers: {
+      authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9'
+    }
+  })
+    .then(res => res.json())
+    .then((result) => {
+      result.forEach(loadDefaultCard);
+    });
   editButton.addEventListener('click', showProfilePopup);
   addCardButton.addEventListener('click', showCardPopup);
   closeProfilePopup.addEventListener('click', () => {closePopup(profilePopup);});
