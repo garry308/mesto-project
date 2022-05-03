@@ -74,10 +74,12 @@ export const newImagePatch = (evt) => {
       imageInput.value = "";
       mainPagePhoto.src = result.avatar;
       closePopup(imagePopup);
-      evt.submitter.textContent = "Сохранить";
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      setTimeout(() => evt.submitter.textContent = "Сохранить", 500);
     });
 }
 
@@ -102,10 +104,12 @@ export const profileInfoPatch = (evt) => {
       mainPageName.textContent = result.name;
       mainPageBio.textContent = result.about;
       closePopup(profilePopup);
-      evt.submitter.textContent = "Сохранить";
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      setTimeout(() => evt.submitter.textContent = "Сохранить", 500);
     });
 }
 
@@ -130,13 +134,15 @@ export const pushCard = (evt) => {
       const newCard = createCard(result);
       cardsContainer.prepend(newCard);
       closePopup(cardPopup);
-      evt.submitter.textContent = "Создать";
       evt.submitter.classList.remove('popup__save-button_active');
       cardNameInput.value = "";
       cardLinkInput.value = "";
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      setTimeout(() => evt.submitter.textContent = "Создать", 500);
     });
 }
 
