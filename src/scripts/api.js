@@ -130,7 +130,7 @@ export const pushCard = (evt) => {
       const newCard = createCard(result);
       cardsContainer.prepend(newCard);
       closePopup(cardPopup);
-      evt.submitter.textContent = "Сохранить";
+      evt.submitter.textContent = "Создать";
       evt.submitter.classList.remove('popup__save-button_active');
       cardNameInput.value = "";
       cardLinkInput.value = "";
