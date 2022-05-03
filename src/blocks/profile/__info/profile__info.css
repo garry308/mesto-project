@@ -4,12 +4,14 @@
   grid-template-columns: 1fr 18px;
   row-gap: 14px;
   column-gap: 10px;
+  margin-top: 24px;
   margin-bottom: 36px;
   grid-template-areas: "name button" "bio bio";
 }
 
 @media (min-width:900px) {
   .profile__info {
+    margin-top: 0;
     max-width: 500px;
     margin-left: 25px;
     margin-bottom: 0;
