@@ -1,104 +1,77 @@
 import '../styles/index.css';
 import { enableValidation} from './validate.js';
-import { loadDefaultCard, createCard} from './card.js';
 import { openPopup, closePopup} from './modal.js';
-import { profilePopup, cardPopup, fsPopup, page, cardNameInput,
-  cardsContainer, cardLinkInput, profileNameInput, profileBioInput, mainPageName,
-  mainPageBio, mainPagePhoto} from './utils.js';
+import { profilePopup, cardPopup, fsPopup, imagePopup, page, cardNameInput,
+  cardLinkInput, profileNameInput, profileBioInput, imageInput, mainPageName,
+  mainPageBio,} from './utils.js';
+import { profileLoading, defaultCardsLoading, newImagePatch, profileInfoPatch, pushCard } from './api.js';
 
 export const closeFsPopup = fsPopup.querySelector('.popup__close-icon');
 export const closeCardPopup = cardPopup.querySelector('.popup__close-icon');
 export const closeProfilePopup = profilePopup.querySelector('.popup__close-icon');
+export const closeImagePopup = imagePopup.querySelector('.popup__close-icon');
 export const editButton = page.querySelector('.profile__edit-button');
 export const addCardButton = page.querySelector('.profile__add-button');
+export const imageEditButton = page.querySelector('.profile__photo-edit-button');
 
 export function postCard (evt) {
   evt.preventDefault();
-  fetch('https://nomoreparties.co/v1/plus-cohort-9/cards ', {
-  method: 'POST',
-  headers: {
-    authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    name: cardNameInput.value,
-    link: cardLinkInput.value
-  })
-})
-  .then(res => res.json())
-  .then((result) => {
-    const newCard = createCard(result);
-    cardsContainer.prepend(newCard);
-    closePopup(cardPopup);
-    evt.submitter.classList.remove('popup__save-button_active');
-    cardNameInput.value = "";
-    cardLinkInput.value = "";
-  });
+  evt.submitter.textContent = "Сохранение...";
+  pushCard(evt);
+  closePopup(cardPopup);
+  evt.submitter.classList.remove('popup__save-button_active');
+  cardNameInput.value = "";
+  cardLinkInput.value = "";
 }
 
 export function showProfilePopup() {
-  openPopup(profilePopup);
   profileNameInput.value = mainPageName.textContent;
   profileBioInput.value = mainPageBio.textContent;
+  profilePopup.querySelector('.popup__save-button').textContent = "Сохранить";
+  openPopup(profilePopup);
 }
 
 export function showCardPopup() {
+  cardPopup.querySelector('.popup__save-button').textContent = "Сохранить";
   openPopup(cardPopup);
+}
+
+export function showImagePopup() {
+  imagePopup.querySelector('.popup__save-button').textContent = "Сохранить";
+  openPopup(imagePopup);
 }
 
 export function postProfileInfo(evt) {
   evt.preventDefault();
-  fetch('https://nomoreparties.co/v1/plus-cohort-9/users/me', {
-  method: 'PATCH',
-  headers: {
-    authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    name: profileNameInput.value,
-    about: profileBioInput.value
-  })
-})
-  .then(res => res.json())
-  .then((result) => {
-    console.log(result);
-  });
+  evt.submitter.textContent = "Сохранение...";
+  profileInfoPatch();
   mainPageName.textContent = profileNameInput.value;
   mainPageBio.textContent = profileBioInput.value;
   closePopup(profilePopup);
 }
 
+export function postImage(evt) {
+  evt.preventDefault();
+  evt.submitter.textContent = "Сохранение...";
+  newImagePatch();
+  evt.submitter.classList.remove('popup__save-button_active');
+  imageInput.value = "";
+  closePopup(imagePopup);
+}
+
 (function () {
-  // загрузка профиля
-  fetch('https://nomoreparties.co/v1/plus-cohort-9/users/me', {
-    headers: {
-      authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9'
-    }
-  })
-    .then(res => res.json())
-    .then((result) => {
-      mainPageName.textContent = result.name;
-      mainPageName.setAttribute('id', result._id);
-      mainPageBio.textContent = result.about;
-      mainPagePhoto.src = result.avatar;
-    });
-  // загрузка карточек
-  fetch('https://nomoreparties.co/v1/plus-cohort-9/cards', {
-    headers: {
-      authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9'
-    }
-  })
-    .then(res => res.json())
-    .then((result) => {
-      result.forEach(loadDefaultCard);
-    });
+  profileLoading();
+  defaultCardsLoading();
+  imageEditButton.addEventListener('click', showImagePopup);
   editButton.addEventListener('click', showProfilePopup);
   addCardButton.addEventListener('click', showCardPopup);
   closeProfilePopup.addEventListener('click', () => {closePopup(profilePopup);});
   closeCardPopup.addEventListener('click', () => {closePopup(cardPopup);});
   closeFsPopup.addEventListener('click', () => {closePopup(fsPopup);});
+  closeImagePopup.addEventListener('click', () => {closePopup(imagePopup);})
   profilePopup.addEventListener('submit', postProfileInfo);
   cardPopup.addEventListener('submit', postCard);
+  imagePopup.addEventListener('submit', postImage);
 
   enableValidation({
     formList: '.popup__container',

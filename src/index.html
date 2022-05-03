@@ -11,7 +11,10 @@
     <img src="<%=require('./images/mesto_header.svg')%>" alt="Место" class="header__logo">
   </header>
   <section class="profile">
-    <img src="<%=require('./images/main-photo.jpg')%>" alt="Фото профиля" class="profile__photo">
+    <div class="profile__photo-container">
+      <img src="<%=require('./images/main-photo.jpg')%>" alt="Фото профиля" class="profile__photo">
+      <button class="profile__photo-edit-button"></button>
+    </div>
     <div class="profile__info">
       <h1 class="profile__name">Имя профиля</h1>
       <button title="Редактировать профиль" type="button" class="profile__edit-button"></button>
@@ -69,6 +72,17 @@
       <p class="popup__cardname">Название карточки</p>
       <button title="Закрыть" type="button" class="popup__close-icon"></button>
     </div>
+  </div>
+  <div class="popup profile-photo_popup">
+    <form name="image" class="popup__container popup__container_photo">
+      <h2 class="popup__title">Обновить аватар</h2>
+      <fieldset class="popup__inputs">
+        <input type="url" class="popup__input popup__bio" id="bio" placeholder="Ссылка на фото" minlength="2" maxlength="200" required>
+        <span class="popup__input-error bio-input-error">Текст ошибки</span>
+        <button title="Cохранить изменения" type="submit" class="popup__save-button popup__save-button_active">Сохранить</button>
+      </fieldset>
+      <button title="Закрыть" type="button" class="popup__close-icon"></button>
+    </form>
   </div>
 </body>
 </html>
