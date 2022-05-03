@@ -1,3 +1,4 @@
+import { postLike, fetchDeleteCard } from "./api.js";
 import { showFullScreen } from "./modal.js";
 import { cardTemplate, cardsContainer, mainPageName }
   from "./utils.js";
@@ -26,7 +27,7 @@ export function createCard(item) {
     deleteIcon.remove();
   }
   else {
-    deleteIcon.addEventListener('click', deleteCard);
+    deleteIcon.addEventListener('click', fetchDeleteCard);
   }
 return newCard;
 }
@@ -37,45 +38,10 @@ export function loadDefaultCard (card) {
 }
 
 export function toggleLike(evt) {
-  const cardId = evt.target.offsetParent.id;
   if (evt.target.classList.contains('cards__like_active')) {
-  fetch(`https://nomoreparties.co/v1/plus-cohort-9/cards/likes/${cardId}`, {
-    method: 'DELETE',
-    headers: {
-      authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9',
-    }
-  })
-  .then(res => res.json())
-  .then((result) => {
-    evt.target.nextElementSibling.textContent = result.likes.length;
-  })
+    postLike('DELETE', evt);
   }
   else {
-  fetch(`https://nomoreparties.co/v1/plus-cohort-9/cards/likes/${cardId}`, {
-    method: 'PUT',
-    headers: {
-      authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9',
-    }
-  })
-  .then(res => res.json())
-  .then((result) => {
-    evt.target.nextElementSibling.textContent = result.likes.length;
-  })
+    postLike('PUT', evt);
   }
-  evt.target.classList.toggle('cards__like_active');
-}
-
-export function deleteCard (btnevt) {
-  const cardId = btnevt.target.nextSibling.parentNode.id;
-  fetch(`https://nomoreparties.co/v1/plus-cohort-9/cards/${cardId}`, {
-    method: 'DELETE',
-    headers: {
-      authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9',
-    }
-  })
-  .then(res => res.json())
-  .then((result) => {
-    console.log(result);
-  })
-  btnevt.target.closest('.cards__card').remove();
 }
