@@ -3,7 +3,7 @@ import { enableValidation } from './validate.js';
 import { openPopup, closePopup } from './modal.js';
 import { profilePopup, cardPopup, fsPopup, imagePopup, page } from './utils.js';
 import { profileLoading, defaultCardsLoading, newImagePatch, profileInfoPatch,
-  pushCard } from './api.js';
+  pushCard, postLike, fetchDeleteCard } from './api.js';
 
 export const closeFsPopup = fsPopup.querySelector('.popup__close-icon');
 export const closeCardPopup = cardPopup.querySelector('.popup__close-icon');
@@ -23,6 +23,19 @@ export function showCardPopup() {
 
 export function showImagePopup() {
   openPopup(imagePopup);
+}
+
+export function toggleLike(evt) {
+  if (evt.target.classList.contains('cards__like_active')) {
+    postLike('DELETE', evt);
+  }
+  else {
+    postLike('PUT', evt);
+  }
+}
+
+export function deleteCard(evt) {
+  fetchDeleteCard(evt);
 }
 
 (function () {

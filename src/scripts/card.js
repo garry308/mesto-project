@@ -1,7 +1,7 @@
-import { postLike, fetchDeleteCard } from "./api.js";
 import { showFullScreen } from "./modal.js";
 import { cardTemplate, cardsContainer, mainPageName }
   from "./utils.js";
+import { toggleLike, deleteCard} from "./index.js";
 
 export function createCard(item) {
   const newCard = cardTemplate.cloneNode(true);
@@ -27,7 +27,7 @@ export function createCard(item) {
     deleteIcon.remove();
   }
   else {
-    deleteIcon.addEventListener('click', fetchDeleteCard);
+    deleteIcon.addEventListener('click', deleteCard);
   }
 return newCard;
 }
@@ -35,13 +35,4 @@ return newCard;
 export function loadDefaultCard (card) {
   const newCard = createCard(card);
   cardsContainer.prepend(newCard);
-}
-
-export function toggleLike(evt) {
-  if (evt.target.classList.contains('cards__like_active')) {
-    postLike('DELETE', evt);
-  }
-  else {
-    postLike('PUT', evt);
-  }
 }
