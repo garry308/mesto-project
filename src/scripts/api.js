@@ -1,8 +1,12 @@
-import { profilePopup, imagePopup, cardPopup, mainPageName, mainPageBio,
-  mainPagePhoto, imageInput, profileNameInput, profileBioInput,
-  cardNameInput, cardLinkInput, cardsContainer } from "./utils.js";
-import { loadDefaultCard, createCard } from "./card.js";
-import { closePopup } from "./modal.js";
+import { imageInput, profileNameInput, profileBioInput,
+  cardNameInput, cardLinkInput} from "./utils.js";
+
+function checkResponse(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
 
 const config = {
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-9',
@@ -16,46 +20,17 @@ export const profileLoading = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((result) => {
-      mainPageName.textContent = result.name;
-      mainPageName.setAttribute('id', result._id);
-      mainPageBio.textContent = result.about;
-      mainPagePhoto.src = result.avatar;
-      profileNameInput.value = mainPageName.textContent;
-      profileBioInput.value = mainPageBio.textContent;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    .then(checkResponse);
 }
 
 export const defaultCardsLoading = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
-    .then((result) => {
-      result.forEach(loadDefaultCard);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  .then(checkResponse);
 }
 
-export const newImagePatch = (evt) => {
-  evt.preventDefault();
-  evt.submitter.textContent = "Сохранение...";
+export const newImagePatch = () => {
   return fetch('https://nomoreparties.co/v1/plus-cohort-9/users/me/avatar', {
     method: 'PATCH',
     headers: config.headers,
@@ -63,29 +38,10 @@ export const newImagePatch = (evt) => {
       avatar: imageInput.value,
     })
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((result) => {
-      evt.submitter.classList.remove('popup__save-button_active');
-      imageInput.value = "";
-      mainPagePhoto.src = result.avatar;
-      closePopup(imagePopup);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      setTimeout(() => evt.submitter.textContent = "Сохранить", 500);
-    });
+  .then(checkResponse);
 }
 
-export const profileInfoPatch = (evt) => {
-  evt.preventDefault();
-  evt.submitter.textContent = "Сохранение...";
+export const profileInfoPatch = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
     headers: config.headers,
@@ -94,28 +50,10 @@ export const profileInfoPatch = (evt) => {
       about: profileBioInput.value
     })
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((result) => {
-      mainPageName.textContent = result.name;
-      mainPageBio.textContent = result.about;
-      closePopup(profilePopup);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      setTimeout(() => evt.submitter.textContent = "Сохранить", 500);
-    });
+  .then(checkResponse);
 }
 
 export const pushCard = (evt) => {
-  evt.preventDefault();
-  evt.submitter.textContent = "Сохранение...";
   return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
     headers: config.headers,
@@ -124,26 +62,7 @@ export const pushCard = (evt) => {
       link: cardLinkInput.value
     })
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((result) => {
-      const newCard = createCard(result);
-      cardsContainer.prepend(newCard);
-      closePopup(cardPopup);
-      evt.submitter.classList.remove('popup__save-button_active');
-      cardNameInput.value = "";
-      cardLinkInput.value = "";
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      setTimeout(() => evt.submitter.textContent = "Создать", 500);
-    });
+  .then(checkResponse);
 }
 
 export const postLike = (method, evt) => {
@@ -152,34 +71,12 @@ export const postLike = (method, evt) => {
     method: method,
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
-  .then((result) => {
-    evt.target.nextElementSibling.textContent = result.likes.length;
-    evt.target.classList.toggle('cards__like_active');
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+  .then(checkResponse);
 }
 
-export const fetchDeleteCard = (btnevt) => {
-  const cardId = btnevt.target.nextSibling.parentNode.id;
+export const fetchDeleteCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
-  })
-  .then(res => {
-    if (res.ok) {
-      return btnevt.target.closest('.cards__card').remove();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
-  .catch((err) => {
-    console.log(err);
   });
 }
