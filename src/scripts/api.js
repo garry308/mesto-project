@@ -1,4 +1,4 @@
-class Api {
+export class Api {
   constructor (options) {
     this._options = options;
   }
@@ -39,7 +39,7 @@ class Api {
     return fetch(`${this._options.baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._options.headers,
-      body: JSON.stringify({info})
+      body: JSON.stringify(info)
     })
     .then(this._checkResponse);
   }
@@ -48,7 +48,7 @@ class Api {
     return fetch(`${this._options.baseUrl}/cards`, {
       method: 'POST',
       headers: this._options.headers,
-      body: JSON.stringify({data})
+      body: JSON.stringify(data)
     })
     .then(this._checkResponse);
   }

@@ -1,4 +1,4 @@
-import {page, fsPopup, imageFsPopup, nameFsPopup } from "./utils.js";
+import { page } from "./utils.js";
 
 export function mouseClosePopup(evt) {
   if (evt.target.classList.contains('popup_opened')) {
@@ -22,11 +22,4 @@ export function closePopup(popup) {
   popup.classList.remove('popup_opened');
   page.removeEventListener('keydown', keyClosePopup);
   page.removeEventListener('mousedown', mouseClosePopup);
-}
-
-export function showFullScreen(evt) {
-  openPopup(fsPopup);
-  imageFsPopup.src = evt.target.currentSrc;
-  imageFsPopup.alt = evt.target.alt;
-  nameFsPopup.textContent = evt.target.alt;
 }

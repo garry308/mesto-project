@@ -1,22 +1,32 @@
-import { showFullScreen } from "./modal.js";
-import { cardsContainer, mainPageName }
-  from "./utils.js";
-import { toggleLike, deleteCard} from "./index.js";
+import { mainPageName } from "./utils.js";
+import { api } from './api.js';
+import {fsPopup} from "./index.js";
 
 export default class Card {
-  constructor({link, name, id, likes, owner}, selector) {
+  constructor({link, name, _id, likes, owner}, selector, api) {
     this._link = link;
     this._name = name;
-    this._id = id;
+    this._id = _id;
     this._likes = likes;
     this._owner = owner;
     this._selector = selector;
+    this._api = api;
+    this._isLiked = false;
   }
 
   _setEventListeners(image, like, deleteIcon) {
-    image.addEventListener('click', showFullScreen);
-    like.addEventListener('click', toggleLike);
-    if (deleteIcon) {deleteIcon.addEventListener('click', deleteCard)}
+    image.addEventListener('click', () => {
+      fsPopup.open(image);
+      fsPopup.setEventListeners();
+    });
+    like.addEventListener('click', (evt) => {
+      this._toggleLike(evt)
+    });
+    if (deleteIcon) {
+      deleteIcon.addEventListener('click', (evt) => {
+        this._deleteCard(evt)
+      })
+    }
   }
 
   _formCard() {
@@ -25,7 +35,7 @@ export default class Card {
 
   _setCard(newCard) {
     const card = newCard.querySelector('.cards__card');
-    card.setAttribute('id', newCard._id);
+    card.setAttribute('id', this._id);
     const image = newCard.querySelector('.cards__image');
     image.src = this._link;
     image.alt = this._name;
@@ -34,13 +44,14 @@ export default class Card {
     const like = newCard.querySelector('.cards__like');
     this._likes.forEach((curLike) => {
       if (curLike._id === mainPageName.id) {
+        this._isLiked = true;
         like.classList.add('cards__like_active')
       }
     })
     const likeCount = newCard.querySelector('.cards__like-count');
     likeCount.textContent = this._likes.length;
-    const deleteIcon =  newCard.querySelector('.cards__delete-icon');
-    if (this._owner.id !== mainPageName.id) {
+    const deleteIcon = newCard.querySelector('.cards__delete-icon');
+    if (this._owner._id !== mainPageName.id) {
       deleteIcon.remove();
     }
 
@@ -56,10 +67,16 @@ export default class Card {
     return card;
   }
 
-}
+  _deleteCard(evt) {
+    this._api.fetchDeleteCard(this._id).then(evt.target.closest('.cards__card').remove());
+  }
 
-
-export function loadDefaultCard (card) {
-  const newCard = new Card(card, '#card');
-  cardsContainer.prepend(newCard.getCard());
+  _toggleLike(evt) {
+    const method = (this._isLiked) ? 'DELETE' : 'PUT';
+    api.postLike(method, evt).then((result) => {
+      evt.target.nextElementSibling.textContent = result.likes.length;
+      evt.target.classList.toggle('cards__like_active');
+      this._isLiked = !this._isLiked;
+    });
+  }
 }
