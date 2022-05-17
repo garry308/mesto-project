@@ -29,4 +29,9 @@ export const validationData = {
 };
 
 export const forms = Array.from(document.forms);
-console.log(forms);
+
+export const userInfoSelectors = {
+  nameSelector : mainPageName,
+  aboutSelector : mainPageBio,
+  avatarSelector : mainPagePhoto
+}

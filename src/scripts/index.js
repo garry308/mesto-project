@@ -1,5 +1,5 @@
 import '../styles/index.css';
-import {api} from './api.js';
+import Api, {api} from './api.js';
 import Section from './Section.js';
 import Card from './card.js';
 import {Popup, PopupWithImage} from "./Popup.js";
@@ -18,9 +18,12 @@ import {
   page,
   profileBioInput,
   profileNameInput,
-  profilePopup,
+  profilePopup, userInfoSelectors,
   validationData
 } from './utils.js';
+import UserInfo from "./UserInfo";
+
+
 
 export const fsPopup = new PopupWithImage('.popup_fs');
 export const closeCardPopup = cardPopup.querySelector('.popup__close-icon');
@@ -103,15 +106,20 @@ export function postImage(evt) {
 }
 
 
+
 (function () {
   Promise.all([api.profileLoading(), api.getInitialCards()])
     .then(([userData, cards]) => {
-      mainPageName.textContent = userData.name;
-      mainPageName.setAttribute('id', userData._id);
-      mainPageBio.textContent = userData.about;
-      mainPagePhoto.src = userData.avatar;
+
+      const userInfo = new UserInfo(userInfoSelectors);
+      userInfo.setUserInfo(userData.name , userData.about);
+      userInfo.setUserAvatar(userData.avatar);
+
+      mainPageName.setAttribute('id', userData._id); //?
+
       profileNameInput.value = userData.name;
       profileBioInput.value = userData.about;
+
       const cardsSection = new Section({
           items: cards,
           renderer: (card) => {
@@ -147,3 +155,5 @@ export function postImage(evt) {
     formValidator.enableValidation();
   })
 })();
+
+
