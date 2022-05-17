@@ -1,82 +1,80 @@
-import { imageInput, profileNameInput, profileBioInput,
-  cardNameInput, cardLinkInput} from "./utils.js";
-
-function checkResponse(res) {
-  if (res.ok) {
-    return res.json();
+export class Api {
+  constructor (options) {
+    this._options = options;
   }
-  return Promise.reject(`Ошибка: ${res.status}`);
+
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+
+  getInitialCards() {
+    return fetch(`${this._options.baseUrl}/cards`, {
+      headers: this._options.headers
+    })
+    .then(this._checkResponse);
+  }
+
+  profileLoading() {
+    return fetch(`${this._options.baseUrl}/users/me`, {
+      headers: this._options.headers
+    })
+    .then(this._checkResponse);
+  }
+
+  newImagePatch(image) {
+    return fetch(`${this._options.baseUrl}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._options.headers,
+      body: JSON.stringify({
+        avatar: image,
+      })
+    })
+    .then(this._checkResponse);
+  }
+
+  profileInfoPatch(info) {
+    return fetch(`${this._options.baseUrl}/users/me`, {
+      method: 'PATCH',
+      headers: this._options.headers,
+      body: JSON.stringify(info)
+    })
+    .then(this._checkResponse);
+  }
+
+  pushCard(data) {
+    return fetch(`${this._options.baseUrl}/cards`, {
+      method: 'POST',
+      headers: this._options.headers,
+      body: JSON.stringify(data)
+    })
+    .then(this._checkResponse);
+  }
+
+  postLike (method, evt) {
+    const cardId = evt.target.offsetParent.id;
+    return fetch(`${this._options.baseUrl}/cards/likes/${cardId}`, {
+      method: method,
+      headers: this._options.headers
+    })
+    .then(this._checkResponse);
+  }
+
+  fetchDeleteCard(cardId) {
+    return fetch(`${this._options.baseUrl}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: this._options.headers
+    })
+    .then(this._checkResponse);
+  }
 }
 
-const config = {
+export const api = new Api ({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-9',
   headers: {
     authorization: '0e51a170-a3a1-4acc-8de7-2fd0ce8b0ce9',
     'Content-Type': 'application/json'
   }
-}
-
-export const profileLoading = () => {
-  return fetch(`${config.baseUrl}/users/me`, {
-    headers: config.headers
-  })
-    .then(checkResponse);
-}
-
-export const defaultCardsLoading = () => {
-  return fetch(`${config.baseUrl}/cards`, {
-    headers: config.headers
-  })
-  .then(checkResponse);
-}
-
-export const newImagePatch = () => {
-  return fetch('https://nomoreparties.co/v1/plus-cohort-9/users/me/avatar', {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify({
-      avatar: imageInput.value,
-    })
-  })
-  .then(checkResponse);
-}
-
-export const profileInfoPatch = () => {
-  return fetch(`${config.baseUrl}/users/me`, {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify({
-      name: profileNameInput.value,
-      about: profileBioInput.value
-    })
-  })
-  .then(checkResponse);
-}
-
-export const pushCard = (evt) => {
-  return fetch(`${config.baseUrl}/cards`, {
-    method: 'POST',
-    headers: config.headers,
-    body: JSON.stringify({
-      name: cardNameInput.value,
-      link: cardLinkInput.value
-    })
-  })
-  .then(checkResponse);
-}
-
-export const postLike = (method, evt) => {
-  const cardId = evt.target.offsetParent.id;
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: method,
-    headers: config.headers
-  })
-  .then(checkResponse);
-}
-
-export const fetchDeleteCard = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/${cardId}`, {
-    method: 'DELETE',
-    headers: config.headers
-  });
-}
+});

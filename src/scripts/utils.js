@@ -1,7 +1,4 @@
 export const page = document.querySelector('.page');
-export const fsPopup = page.querySelector('.popup_fs');
-export const imageFsPopup = fsPopup.querySelector('.popup__image');
-export const nameFsPopup = fsPopup.querySelector('.popup__cardname');
 
 export const cardPopup = page.querySelector('.newcard_popup');
 export const cardNameInput =  cardPopup.querySelector('.popup__name');
