@@ -1,9 +1,9 @@
 import '../styles/index.css';
-import Api, {api} from './api.js';
+import {api} from './api.js';
 import Section from './Section.js';
 import Card from './card.js';
 import {Popup, PopupWithImage} from "./Popup.js";
-import {FormValidator} from './FormValidator.js';
+import { FormValidator } from './FormValidator.js';
 import {closePopup, openPopup} from './modal.js';
 import {
   cardLinkInput,
