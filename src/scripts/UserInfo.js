@@ -6,6 +6,7 @@ export default class UserInfo {
     this._avatarSelector = avatarSelector;
   }
 
+
   getUserInfo() {
     return {
       name: this._nameSelector.textContent,

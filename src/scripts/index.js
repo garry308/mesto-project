@@ -2,19 +2,31 @@ import '../styles/index.css';
 import { api } from './api.js';
 import Section from './Section.js';
 import Card from './card.js';
-import {Popup, PopupWithImage} from "./Popup.js";
-import { enableValidation } from './validate.js';
 import { openPopup, closePopup } from './modal.js';
-import { profilePopup, cardPopup, imagePopup, page, mainPageName, mainPageBio,
-  mainPagePhoto, profileNameInput, imageInput, profileBioInput, cardNameInput, cardLinkInput } from './utils.js';
-
-export const fsPopup = new PopupWithImage('.popup_fs');
-export const closeCardPopup = cardPopup.querySelector('.popup__close-icon');
-export const closeProfilePopup = profilePopup.querySelector('.popup__close-icon');
-export const closeImagePopup = imagePopup.querySelector('.popup__close-icon');
-export const editButton = page.querySelector('.profile__edit-button');
-export const addCardButton = page.querySelector('.profile__add-button');
-export const imageEditButton = page.querySelector('.profile__photo-edit-button');
+import {
+  profilePopup,
+  cardPopup,
+  imagePopup,
+  mainPageName,
+  mainPageBio,
+  mainPagePhoto,
+  profileNameInput,
+  imageInput,
+  profileBioInput,
+  cardNameInput,
+  cardLinkInput,
+  allForms,
+  validationOptions,
+  imageEditButton,
+  editButton,
+  addCardButton,
+  closeProfilePopup,
+  closeCardPopup,
+  closeImagePopup,
+  userInputSelectors
+} from './utils.js';
+import {FormValidator} from "./FormValidator";
+import UserInfo from "./UserInfo";
 
 export function showProfilePopup() {
   openPopup(profilePopup);
@@ -28,6 +40,8 @@ export function showImagePopup() {
   openPopup(imagePopup);
 }
 
+const currentUser = new UserInfo(userInputSelectors);
+
 export function postProfileInfo(evt) {
   evt.preventDefault();
   evt.submitter.textContent = "Сохранение...";
@@ -35,9 +49,10 @@ export function postProfileInfo(evt) {
     name: profileNameInput.value,
     about: profileBioInput.value
   }
+
   api.profileInfoPatch(data).then((result) => {
-    mainPageName.textContent = result.name;
-    mainPageBio.textContent = result.about;
+    console.log(result.name);
+    currentUser.setUserInfo(result.name, result.about);
     closePopup(profilePopup);
   })
   .catch((err) => {
@@ -86,7 +101,7 @@ export function postImage(evt) {
   api.newImagePatch(imageInput.value).then((result) => {
     evt.submitter.classList.remove('popup__save-button_active');
     imageInput.value = "";
-    mainPagePhoto.src = result.avatar;
+    currentUser.setUserAvatar(result.avatar);
     closePopup(imagePopup);
   })
   .catch((err) => {
@@ -100,12 +115,11 @@ export function postImage(evt) {
 (function () {
   Promise.all([api.profileLoading(), api.getInitialCards()])
   .then(([userData, cards]) => {
-    mainPageName.textContent = userData.name;
     mainPageName.setAttribute('id', userData._id);
-    mainPageBio.textContent = userData.about;
-    mainPagePhoto.src = userData.avatar;
-    profileNameInput.value = userData.name;
-    profileBioInput.value = userData.about;
+    currentUser.setUserInfo(userData.name, userData.about);
+    currentUser.setUserAvatar(userData.avatar);
+    profileNameInput.value = currentUser.getUserInfo().name;
+    profileBioInput.value = currentUser.getUserInfo().about;
     const cardsSection = new Section ({
       items: cards,
       renderer: (card) => {
@@ -120,6 +134,7 @@ export function postImage(evt) {
   .catch((err) => {
     console.log(err);
   });
+
   imageEditButton.addEventListener('click', showImagePopup);
   editButton.addEventListener('click', showProfilePopup);
   addCardButton.addEventListener('click', showCardPopup);
@@ -130,14 +145,9 @@ export function postImage(evt) {
   cardPopup.addEventListener('submit', postCard);
   imagePopup.addEventListener('submit', postImage);
 
-  enableValidation({
-    formList: '.popup__container',
-    fieldsetList: '.popup__inputs',
-    oneFieldset: '.popup__input',
-    buttonElement: '.popup__save-button',
-    activeButtonClass: 'popup__save-button_active',
-    activeErrorClass: 'popup__input-error_active',
-    inputErrorClass: 'popup__input_error',
-    errorClassWithoutId: '-input-error'
+  allForms.forEach( form => {
+    const formValidator = new FormValidator(validationOptions, form);
+    formValidator.enableValidation();
   });
+
 }) ();
