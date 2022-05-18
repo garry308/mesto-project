@@ -74,7 +74,6 @@ export class PopupWithForm extends Popup {
 		this._popup.querySelectorAll('.popup__input').forEach((element) => {
 			element.value = "";
 		});
-		setTimeout(() => this._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
 		this._popup.classList.remove('popup_opened');
 	}
 }

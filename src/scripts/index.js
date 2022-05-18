@@ -26,6 +26,9 @@ export const imagePopup = new PopupWithForm('.profile-photo_popup', ({bio: avata
   .catch((err) => {
     console.log(err);
   })
+  .finally(() => {
+    setTimeout(() => imagePopup._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
+  })
 });
 
 export const profilePopup = new PopupWithForm('.profile_popup', (info) => {
@@ -36,6 +39,9 @@ export const profilePopup = new PopupWithForm('.profile_popup', (info) => {
   })
   .catch((err) => {
     console.log(err);
+  })
+  .finally(() => {
+    setTimeout(() => profilePopup._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
   })
 });
 
@@ -56,6 +62,9 @@ export const cardPopup = new PopupWithForm('.newcard_popup', (info) => {
   })
   .catch((err) => {
     console.log(err);
+  })
+  .finally(() => {
+    setTimeout(() => cardPopup._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
   })
 });
 export const editButton = page.querySelector('.profile__edit-button');
