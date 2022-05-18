@@ -1,4 +1,6 @@
-import {page} from "./utils";
+import {mainPagePhoto, page} from "./utils";
+import {closePopup} from "./modal";
+import {imagePopup} from "./index";
 
 export default class Popup {
 	constructor(selector) {
@@ -42,5 +44,37 @@ export class PopupWithImage extends Popup {
 		this._popup.querySelector('.popup__image').src = image.src;
 		this._popup.querySelector('.popup__image').alt = image.alt;
 		this._popup.querySelector('.popup__cardname').textContent = image.alt;
+	}
+}
+
+export class PopupWithForm extends Popup {
+	constructor(selector, callback) {
+		super(selector);
+		this._callback = callback;
+	}
+
+	_getInputValues() {
+		const result = {};
+		this._popup.querySelectorAll('.popup__input').forEach((element) => {
+			result[element.id] = element.value;
+		});
+		return result;
+	}
+
+	setEventListeners() {
+		super.setEventListeners();
+		this._popup.addEventListener('submit', () => {
+			this._popup.querySelector('.popup__save-button').textContent = "Сохранение...";
+			this._callback(this._getInputValues());
+			});
+		}
+
+	close() {
+		super.close();
+		this._popup.querySelectorAll('.popup__input').forEach((element) => {
+			element.value = "";
+		});
+		setTimeout(() => this._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
+		this._popup.classList.remove('popup_opened');
 	}
 }

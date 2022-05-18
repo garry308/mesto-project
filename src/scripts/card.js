@@ -1,6 +1,6 @@
 import { mainPageName } from "./utils.js";
 import { api } from './api.js';
-import {fsPopup} from "./index.js";
+import { fsPopup } from "./index.js";
 
 export default class Card {
   constructor({link, name, _id, likes, owner}, selector, api) {

@@ -1,21 +1,8 @@
 export const page = document.querySelector('.page');
 
-export const cardPopup = page.querySelector('.newcard_popup');
-export const cardNameInput =  cardPopup.querySelector('.popup__name');
-export const cardLinkInput =  cardPopup.querySelector('.popup__bio');
-
-export const profilePopup = page.querySelector('.profile_popup');
-export const profileNameInput =  profilePopup.querySelector('.popup__name');
-export const profileBioInput =  profilePopup.querySelector('.popup__bio');
-
-export const imagePopup = page.querySelector('.profile-photo_popup');
-export const imageInput = imagePopup.querySelector('.popup__bio');
-
 export const mainPageName = page.querySelector('.profile__name');
 export const mainPageBio = page.querySelector('.profile__bio');
 export const mainPagePhoto = page.querySelector('.profile__photo');
-export const cardTemplate = page.querySelector('#card').content;
-export const cardsContainer = page.querySelector('.cards');
 
 export const validationData = {
   formList: '.popup__container',
@@ -31,7 +18,7 @@ export const validationData = {
 export const forms = Array.from(document.forms);
 
 export const userInfoSelectors = {
-  nameSelector : mainPageName,
-  aboutSelector : mainPageBio,
-  avatarSelector : mainPagePhoto
+  nameSelector : mainPageName, // '.profile__name'
+  aboutSelector : mainPageBio, // '.profile__bio'
+  avatarSelector : mainPagePhoto // '.profile__photo'
 }
