@@ -14,5 +14,3 @@ export const imageInput = imagePopup.querySelector('.popup__bio');
 export const mainPageName = page.querySelector('.profile__name');
 export const mainPageBio = page.querySelector('.profile__bio');
 export const mainPagePhoto = page.querySelector('.profile__photo');
-export const cardTemplate = page.querySelector('#card').content;
-export const cardsContainer = page.querySelector('.cards');

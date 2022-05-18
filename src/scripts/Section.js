@@ -1,5 +1,3 @@
-
-
 export default class Section {
 	constructor({items, renderer}, selector) {
 		this._items = items;

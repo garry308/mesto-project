@@ -6,7 +6,7 @@ import {Popup, PopupWithImage} from "./Popup.js";
 import { enableValidation } from './validate.js';
 import { openPopup, closePopup } from './modal.js';
 import { profilePopup, cardPopup, imagePopup, page, mainPageName, mainPageBio,
-  mainPagePhoto, profileNameInput, imageInput, profileBioInput, cardNameInput, cardLinkInput, cardsContainer } from './utils.js';
+  mainPagePhoto, profileNameInput, imageInput, profileBioInput, cardNameInput, cardLinkInput } from './utils.js';
 
 export const fsPopup = new PopupWithImage('.popup_fs');
 export const closeCardPopup = cardPopup.querySelector('.popup__close-icon');
@@ -48,7 +48,7 @@ export function postProfileInfo(evt) {
   });
 }
 
-export function postCard(evt) {
+function postCard(evt) {
   evt.preventDefault();
   evt.submitter.textContent = "Сохранение...";
   const data = {
@@ -56,19 +56,28 @@ export function postCard(evt) {
     link: cardLinkInput.value
   }
   api.pushCard(data).then((result) => {
-    loadDefaultCard(result);
+    const cardsSection = new Section ({
+          items: [result],
+          renderer: (card) => {
+            const newCard = new Card (card, '#card', api);
+            return newCard.getCard();
+          }
+        },
+        '.cards'
+    );
+    cardsSection.renderItems();
     closePopup(cardPopup);
     evt.submitter.disabled = "true";
     evt.submitter.classList.remove('popup__save-button_active');
     cardNameInput.value = "";
     cardLinkInput.value = "";
   })
-  .catch((err) => {
-    console.log(err);
-  })
-  .finally(() => {
-    setTimeout(() => evt.submitter.textContent = "Создать", 500);
-  });
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setTimeout(() => evt.submitter.textContent = "Создать", 500);
+      });
 }
 
 export function postImage(evt) {
