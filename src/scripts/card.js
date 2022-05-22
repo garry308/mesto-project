@@ -19,12 +19,12 @@ export default class Card {
       fsPopup.setEventListeners();
     });
     like.addEventListener('click', (evt) => {
-      this._toggleLike(evt)
+      this._toggleLike(evt);
     });
     if (deleteIcon) {
       deleteIcon.addEventListener('click', (evt) => {
-        this._deleteCard(evt)
-      })
+        this._deleteCard(evt);
+      });
     }
   }
 
@@ -44,9 +44,9 @@ export default class Card {
     this._likes.forEach((curLike) => {
       if (curLike._id === mainPageName.id) {
         this._isLiked = true;
-        like.classList.add('cards__like_active')
+        like.classList.add('cards__like_active');
       }
-    })
+    });
     const likeCount = newCard.querySelector('.cards__like-count');
     likeCount.textContent = this._likes.length;
     const deleteIcon = newCard.querySelector('.cards__delete-icon');
