@@ -1,4 +1,4 @@
-import { page } from "./utils.js";
+import { page } from "../components/utils.js";
 
 export function mouseClosePopup(evt) {
   if (evt.target.classList.contains('popup_opened')) {

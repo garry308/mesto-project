@@ -11,7 +11,7 @@ export default class UserInfo {
       name: this._nameSelector.textContent,
       about: this._aboutSelector.textContent,
       avatar: this._avatarSelector.src
-    }
+    };
   }
 
   setUserInfo(name, about) {

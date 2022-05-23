@@ -1,15 +1,15 @@
 import { mainPageName } from "./utils.js";
-import { api } from './api.js';
-import { fsPopup } from "./index.js";
+import { api } from './Api.js';
+import { fsPopup } from "../pages";
 
 export default class Card {
-  constructor({link, name, _id, likes, owner}, selector, api) {
+  constructor({link, name, _id, likes, owner}, templateSelector, api) {
     this._link = link;
     this._name = name;
     this._id = _id;
     this._likes = likes;
     this._owner = owner;
-    this._selector = selector;
+    this._selector = templateSelector;
     this._api = api;
     this._isLiked = false;
   }
@@ -20,12 +20,12 @@ export default class Card {
       fsPopup.setEventListeners();
     });
     like.addEventListener('click', (evt) => {
-      this._toggleLike(evt)
+      this._toggleLike(evt);
     });
     if (deleteIcon) {
       deleteIcon.addEventListener('click', (evt) => {
-        this._deleteCard(evt)
-      })
+        this._deleteCard(evt);
+      });
     }
   }
 
@@ -45,9 +45,9 @@ export default class Card {
     this._likes.forEach((curLike) => {
       if (curLike._id === mainPageName.id) {
         this._isLiked = true;
-        like.classList.add('cards__like_active')
+        like.classList.add('cards__like_active');
       }
-    })
+    });
     const likeCount = newCard.querySelector('.cards__like-count');
     likeCount.textContent = this._likes.length;
     const deleteIcon = newCard.querySelector('.cards__delete-icon');

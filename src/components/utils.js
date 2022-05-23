@@ -14,11 +14,14 @@ export const validationData = {
   inputErrorClass: 'popup__input_error',
   errorClassWithoutId: '-input-error'
 };
-
+export const editButton = page.querySelector('.profile__edit-button');
+export const imageEditButton = page.querySelector('.profile__photo-edit-button');
 export const forms = Array.from(document.forms);
 
 export const userInfoSelectors = {
   nameSelector : mainPageName, // '.profile__name'
   aboutSelector : mainPageBio, // '.profile__bio'
   avatarSelector : mainPagePhoto // '.profile__photo'
-}
+};
+
+export const addCardButton = page.querySelector('.profile__add-button');

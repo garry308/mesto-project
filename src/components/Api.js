@@ -1,4 +1,4 @@
-export default class Api {
+class Api {
   constructor (options) {
     this._options = options;
   }
@@ -70,7 +70,6 @@ export default class Api {
     .then(this._checkResponse);
   }
 }
-
 
 export const api = new Api ({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-9',

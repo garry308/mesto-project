@@ -1,19 +1,20 @@
 import '../styles/index.css';
-import { api } from './api.js';
-import Section from './Section.js';
-import Card from './card.js';
-import { PopupWithImage, PopupWithForm } from "./Popup.js";
-import { FormValidator } from './FormValidator.js';
+import {api} from '../components/Api.js';
+import Section from '../components/Section.js';
+import Card from '../components/Card.js';
+import {FormValidator} from '../components/FormValidator.js';
 import {
-  forms,
+  addCardButton, editButton,
+  forms, imageEditButton,
   mainPageBio,
   mainPageName,
   mainPagePhoto,
-  page,
   userInfoSelectors,
   validationData
-} from './utils.js';
-import UserInfo from "./UserInfo.js";
+} from '../components/utils.js';
+import UserInfo from "../components/UserInfo.js";
+import PopupWithImage from "../components/PopupWithImage";
+import PopupWithForm from "../components/PopupWithForm";
 
 
 export const fsPopup = new PopupWithImage('.popup_fs');
@@ -28,7 +29,7 @@ export const imagePopup = new PopupWithForm('.profile-photo_popup', ({bio: avata
   })
   .finally(() => {
     setTimeout(() => imagePopup._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
-  })
+  });
 });
 
 export const profilePopup = new PopupWithForm('.profile_popup', (info) => {
@@ -42,7 +43,7 @@ export const profilePopup = new PopupWithForm('.profile_popup', (info) => {
   })
   .finally(() => {
     setTimeout(() => profilePopup._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
-  })
+  });
 });
 
 export const cardPopup = new PopupWithForm('.newcard_popup', (info) => {
@@ -65,11 +66,8 @@ export const cardPopup = new PopupWithForm('.newcard_popup', (info) => {
   })
   .finally(() => {
     setTimeout(() => cardPopup._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
-  })
+  });
 });
-export const editButton = page.querySelector('.profile__edit-button');
-export const addCardButton = page.querySelector('.profile__add-button');
-export const imageEditButton = page.querySelector('.profile__photo-edit-button');
 
 (function () {
   Promise.all([api.profileLoading(), api.getInitialCards()])
@@ -95,7 +93,7 @@ export const imageEditButton = page.querySelector('.profile__photo-edit-button')
 
   imageEditButton.addEventListener('click', () => {
     imagePopup.open();
-    imagePopup.setEventListeners()
+    imagePopup.setEventListeners();
   });
   editButton.addEventListener('click', () => {
     profilePopup.open();
@@ -106,12 +104,10 @@ export const imageEditButton = page.querySelector('.profile__photo-edit-button')
     cardPopup.setEventListeners();
   });
 
-
   forms.forEach(form => {
-    console.log(form);
     let formValidator = new FormValidator(validationData, form);
     formValidator.enableValidation();
-  })
+  });
 })();
 
 
