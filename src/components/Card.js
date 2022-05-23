@@ -1,4 +1,4 @@
-import { mainPageName } from "./utils.js";
+import { mainPageName } from "./Utils.js";
 import { api } from './Api.js';
 import { fsPopup } from "../pages";
 
