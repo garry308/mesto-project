@@ -70,9 +70,9 @@ const userInfo = new UserInfo(userInfoSelectors, api);
 (function () {
   Promise.all([userInfo.getUserInfo(), api.getInitialCards()])
     .then(([userData, cards]) => {
+      mainPageName.setAttribute('id', userData.id);
       userInfo.setUserInfo(userData);
       userInfo.setUserAvatar(userData);
-      mainPageName.setAttribute('id', userData._id);
       const cardsSection = new Section({
         items: cards,
         renderer: (card) => {
