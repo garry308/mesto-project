@@ -2,12 +2,14 @@ import Popup from "./Popup";
 export default class PopupWithImage extends Popup {
   constructor(selector) {
     super(selector);
+    this._imageContainer = this.popup.querySelector('.popup__image');
+    this._nameContainer = this.popup.querySelector('.popup__cardname');
   }
 
   open(image) {
     super.open();
-    this._popup.querySelector('.popup__image').src = image.src;
-    this._popup.querySelector('.popup__image').alt = image.alt;
-    this._popup.querySelector('.popup__cardname').textContent = image.alt;
+    this._imageContainer.src = image.src;
+    this._imageContainer.alt = image.alt;
+    this._nameContainer.textContent = image.alt;
   }
 }

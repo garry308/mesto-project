@@ -24,4 +24,15 @@ export const userInfoSelectors = {
   avatarSelector : mainPagePhoto // '.profile__photo'
 };
 
+export const cardSelectors = {
+  template: '#card',
+  card: '.cards__card',
+  image: '.cards__image',
+  name: '.cards__name',
+  like: '.cards__like',
+  likeActive: 'cards__like_active',
+  likeCount: '.cards__like-count',
+  deleteIcon: '.cards__delete-icon'
+};
+
 export const addCardButton = page.querySelector('.profile__add-button');

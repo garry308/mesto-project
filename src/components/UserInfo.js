@@ -24,6 +24,7 @@ export default class UserInfo {
       .then((result) => {
         this._nameSelector.textContent = result.name;
         this._aboutSelector.textContent = result.about;
+        this._nameSelector.id = result._id;
       }).catch((error) => console.log(`Error ${error}!!!`));
   }
 

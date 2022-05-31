@@ -1,82 +1,96 @@
-import { mainPageName } from "./Utils.js";
-import { api } from './Api.js';
-import { fsPopup } from "../pages";
-
 export default class Card {
-  constructor({link, name, _id, likes, owner}, templateSelector, api) {
+  constructor({link, name, _id, likes, owner}, selectors, api, fsPopup, userId) {
+    this._api = api;
     this._link = link;
     this._name = name;
     this._id = _id;
     this._likes = likes;
     this._owner = owner;
-    this._selector = templateSelector;
+    this._template = document.querySelector(selectors.template);
+    this._selectors = selectors;
+    this._cardElement = null;
+    this._card = null;
+    this._cardImage = null;
+    this._cardName = null;
+    this._cardLike = null;
+    this._cardLikeCount = null;
+    this._cardDeleteIcon = null;
     this._api = api;
     this._isLiked = false;
+    this._userId = userId;
+    this._fsPopup = fsPopup;
   }
-
-  _setEventListeners(image, like, deleteIcon) {
-    image.addEventListener('click', () => {
-      fsPopup.open(image);
-      fsPopup.setEventListeners();
+  _setEventListeners() {
+    this._cardImage.addEventListener('click', () => {
+      this._fsPopup.open(this._cardImage);
+      this._fsPopup.setEventListeners();
     });
-    like.addEventListener('click', (evt) => {
+    this._cardLike.addEventListener('click', (evt) => {
       this._toggleLike(evt);
     });
-    if (deleteIcon) {
-      deleteIcon.addEventListener('click', (evt) => {
+    if (this._cardDeleteIcon) {
+      this._cardDeleteIcon.addEventListener('click', (evt) => {
         this._deleteCard(evt);
       });
     }
   }
 
   _formCard() {
-    return document.querySelector(this._selector).content.cloneNode(true);
+    this._cardElement = this._template.content.cloneNode(true);
+    this._card = this._cardElement.querySelector(this._selectors.card);
+    this._cardImage = this._cardElement.querySelector(this._selectors.image);
+    this._cardName = this._cardElement.querySelector(this._selectors.name);
+    this._cardLike = this._cardElement.querySelector(this._selectors.like);
+    this._cardLikeCount = this._cardElement.querySelector(this._selectors.likeCount);
+    this._cardDeleteIcon = this._cardElement.querySelector(this._selectors.deleteIcon);
   }
 
-  _setCard(newCard) {
-    const card = newCard.querySelector('.cards__card');
-    card.setAttribute('id', this._id);
-    const image = newCard.querySelector('.cards__image');
-    image.src = this._link;
-    image.alt = this._name;
-    const name = newCard.querySelector('.cards__name');
-    name.textContent = this._name;
-    const like = newCard.querySelector('.cards__like');
+  _setCard() {
+    this._card.setAttribute('id', this._id);
+    this._cardImage.src = this._link;
+    this._cardImage.alt = this._name;
+    this._cardName.textContent = this._name;
     this._likes.forEach((curLike) => {
-      if (curLike._id === mainPageName.id) {
+      if (curLike._id === this._userId) {
         this._isLiked = true;
-        like.classList.add('cards__like_active');
+        this._cardLike.classList.add(this._selectors.likeActive);
       }
     });
-    const likeCount = newCard.querySelector('.cards__like-count');
-    likeCount.textContent = this._likes.length;
-    const deleteIcon = newCard.querySelector('.cards__delete-icon');
-    if (this._owner._id !== mainPageName.id) {
-      deleteIcon.remove();
+    this._cardLikeCount.textContent = this._likes.length;
+    if (this._owner._id !== this._userId) {
+      this._cardDeleteIcon.remove();
     }
+    this._setEventListeners();
 
-    this._setEventListeners(image, like, deleteIcon);
-
-    return newCard;
+    return this._cardElement;
   }
 
   getCard() {
-    const newCard = this._formCard();
-    const card = this._setCard(newCard);
+    this._formCard();
+    this._setCard();
 
-    return card;
+    return this._cardElement;
   }
 
   _deleteCard(evt) {
-    this._api.fetchDeleteCard(this._id).then(evt.target.closest('.cards__card').remove());
+    this._api.fetchDeleteCard(this._id)
+        .then(() => {
+          evt.target.closest('.cards__card').remove()
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   }
 
   _toggleLike(evt) {
     const method = (this._isLiked) ? 'DELETE' : 'PUT';
-    api.postLike(method, evt).then((result) => {
+    this._api.postLike(method, evt).then((result) => {
       evt.target.nextElementSibling.textContent = result.likes.length;
       evt.target.classList.toggle('cards__like_active');
       this._isLiked = !this._isLiked;
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  }
+}
 }

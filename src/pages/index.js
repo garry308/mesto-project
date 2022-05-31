@@ -8,95 +8,80 @@ import {
   forms, imageEditButton,
   mainPageBio,
   mainPageName,
-  mainPagePhoto,
   userInfoSelectors,
-  validationData
-} from '../components/Utils.js';
+  validationData,
+  cardSelectors
+} from '../utils/constants.js';
 import UserInfo from "../components/UserInfo.js";
 import PopupWithImage from "../components/PopupWithImage";
 import PopupWithForm from "../components/PopupWithForm";
 
 export const fsPopup = new PopupWithImage('.popup_fs');
-export const imagePopup = new PopupWithForm('.profile-photo_popup', ({bio: avatar}) => {
-  api.newImagePatch(avatar).then((result) => {
-    mainPagePhoto.src = result.avatar;
-    imagePopup.close();
-  })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      setTimeout(() => imagePopup._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
-    });
+export const avatarPopup = new PopupWithForm('.profile-photo_popup', ({bio: avatar}) => {
+  userInfo.setUserAvatar({avatar});
+  avatarPopup.close();
+  setTimeout(() => avatarPopup.popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
 });
+avatarPopup.setEventListeners()
 export const profilePopup = new PopupWithForm('.profile_popup', (info) => {
-  api.profileInfoPatch(info).then((result) => {
-    mainPageName.textContent = result.name;
-    mainPageBio.textContent = result.about;
+    userInfo.setUserInfo(info);
     profilePopup.close();
-  })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      setTimeout(() => profilePopup._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
-    });
+    setTimeout(() => profilePopup.popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
 });
+profilePopup.setEventListeners()
 export const cardPopup = new PopupWithForm('.newcard_popup', (info) => {
   const data = {name: info.placename, link: info.link};
   api.pushCard(data).then((result) => {
     const cardsSection = new Section({
         items: [result],
         renderer: (card) => {
-          const newCard = new Card(card, '#card', api);
+          const newCard = new Card(card, cardSelectors, api, fsPopup, userId);
           return newCard.getCard();
         }
       },
       '.cards'
     );
-    cardsSection.renderItems();
+    cardsSection.renderItems(result);
     cardPopup.close();
   })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      setTimeout(() => cardPopup._popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
+      setTimeout(() => cardPopup.popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
     });
 });
-
+cardPopup.setEventListeners();
 const userInfo = new UserInfo(userInfoSelectors, api);
 
 (function () {
   Promise.all([userInfo.getUserInfo(), api.getInitialCards()])
     .then(([userData, cards]) => {
-      mainPageName.setAttribute('id', userData.id);
       userInfo.setUserInfo(userData);
       userInfo.setUserAvatar(userData);
+      const userId = userData.id;
       const cardsSection = new Section({
         items: cards,
         renderer: (card) => {
-          const newCard = new Card(card, '#card', api);
+          const newCard = new Card(card, cardSelectors, api, fsPopup, userId);
           return newCard.getCard();
         }
       }, '.cards');
-      cardsSection.renderItems();
+      cardsSection.renderItems(cards);
     })
     .catch((err) => {
       console.log(err);
     });
 
   imageEditButton.addEventListener('click', () => {
-    imagePopup.open();
-    imagePopup.setEventListeners();
+    avatarPopup.open();
   });
   editButton.addEventListener('click', () => {
     profilePopup.open();
-    profilePopup.setEventListeners();
+    profilePopup.setInputValues({name: mainPageName.textContent, about: mainPageBio.textContent});
   });
   addCardButton.addEventListener('click', () => {
     cardPopup.open();
-    cardPopup.setEventListeners();
   });
 
   forms.forEach(form => {
