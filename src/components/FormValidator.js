@@ -3,67 +3,68 @@ export class FormValidator {
   constructor(validationOptions, formElement) {
     this._validationOptions = validationOptions;
     this._formElement = formElement;
+    this._inputList = Array.from(formElement.querySelectorAll(this._validationOptions.oneFieldset));
+    this._submitButton = formElement.querySelector(this._validationOptions.buttonElement);
   }
 
   enableValidation() {
     this._formElement.addEventListener('submit', function (evt) {
       evt.preventDefault();
     });
-    const fieldsetList = Array.from(this._formElement.querySelectorAll(this._validationOptions.fieldsetList));
-    fieldsetList.forEach((fieldSet) => {
-      this._setEventListeners(fieldSet, this._validationOptions);
-    });
+    this._setEventListeners();
   };
 
-  _setEventListeners(formElement, data) {
-    const inputList = Array.from(formElement.querySelectorAll(data.oneFieldset));
-    const buttonElement = formElement.querySelector(data.buttonElement);
-    this._toggleButtonState(data, inputList, buttonElement);
-    inputList.forEach((inputElement) => {
+  resetValidation() {
+    this._toggleButtonState();
+    this._inputList.forEach((inputElement) => {
+      this._hideInputError(inputElement);
+    })
+  }
+
+  _setEventListeners() {
+    this._toggleButtonState();
+    this._inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
-        this._checkInputValidity(data, formElement, inputElement);
-        this._toggleButtonState(data, inputList, buttonElement);
+        this._checkInputValidity(inputElement);
+        this._toggleButtonState();
       });
     });
-    buttonElement.addEventListener('submit', () => {
-      this._toggleButtonState(data, inputList, buttonElement);
-    });  /// сделать проверку кнопки или отключение после submit
   };
 
-  _toggleButtonState(data, inputList, buttonElement) {
-    if (this._hasInvalidInput(inputList)) {
-      buttonElement.disabled = "true";
-      buttonElement.classList.remove(data.activeButtonClass);
+  _toggleButtonState() {
+    if (this._hasInvalidInput()) {
+      this._submitButton.disabled = "true";
+      this._submitButton.classList.remove(this._validationOptions.activeButtonClass);
     } else {
-      buttonElement.removeAttribute("disabled");
-      buttonElement.classList.add(data.activeButtonClass);
+      this._submitButton.removeAttribute("disabled");
+      this._submitButton.classList.add(this._validationOptions.activeButtonClass);
     }
   }
 
-  _checkInputValidity(data, formElement, inputElement) {
+  _checkInputValidity(inputElement) {
     if (!inputElement.validity.valid) {
-      this._showInputError(data, formElement, inputElement, inputElement.validationMessage);
+      this._showInputError(this._validationOptions, this._formElement, inputElement, inputElement.validationMessage);
     } else {
-      this._hideInputError(data, formElement, inputElement);
+      this._hideInputError(this._validationOptions, this._formElement, inputElement);
     }
   }
 
-  _showInputError(data, formElement, inputElement, errorMessage) {
-    const errorElement = formElement.querySelector(`.${inputElement.id}${data.errorClassWithoutId}`);
-    inputElement.classList.add(data.inputErrorClass);
+  _showInputError(inputElement, errorMessage) {
+    const errorElement = this._formElement.querySelector(`.${inputElement.id}${this._validationOptions.errorClassWithoutId}`);
+    inputElement.classList.add(this._validationOptions.inputErrorClass);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add(data.activeErrorClass);
+    errorElement.classList.add(this._validationOptions.activeErrorClass);
   };
 
-  _hideInputError(data, formElement, inputElement) {
-    const errorElement = formElement.querySelector(`.${inputElement.id}${data.errorClassWithoutId}`);
-    inputElement.classList.remove(data.inputErrorClass);
-    errorElement.classList.remove(data.activeErrorClass);
+  _hideInputError(inputElement) {
+    const errorElement = this._formElement.querySelector(`.${inputElement.id}${this._validationOptions.errorClassWithoutId}`);
+    inputElement.classList.remove(this._validationOptions.inputErrorClass);
+    errorElement.classList.remove(this._validationOptions.activeErrorClass);
     errorElement.textContent = 'Текст ошибки';
   };
 
-  _hasInvalidInput(inputList) {
-    return inputList.some((inputElement) => {
+  _hasInvalidInput() {
+    return this._inputList.some((inputElement) => {
       return !inputElement.validity.valid;
     })
   }
