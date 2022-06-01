@@ -16,19 +16,37 @@ import UserInfo from "../components/UserInfo.js";
 import PopupWithImage from "../components/PopupWithImage";
 import PopupWithForm from "../components/PopupWithForm";
 
+
+const formValidators = {};
+function enableValidation(validationData) {
+  const formList = Array.from(document.querySelectorAll(validationData.formList));
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(validationData, formElement);
+    const formName = formElement.getAttribute('name');
+    formValidators[formName] = validator;
+    validator.enableValidation();
+  })
+}
+console.log(formValidators);
+
+enableValidation(validationData);
+
 export const fsPopup = new PopupWithImage('.popup_fs');
+
 export const avatarPopup = new PopupWithForm('.profile-photo_popup', ({bio: avatar}) => {
   userInfo.setUserAvatar({avatar});
   avatarPopup.close();
   setTimeout(() => avatarPopup.popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
 });
 avatarPopup.setEventListeners()
+
 export const profilePopup = new PopupWithForm('.profile_popup', (info) => {
     userInfo.setUserInfo(info);
     profilePopup.close();
     setTimeout(() => profilePopup.popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
 });
 profilePopup.setEventListeners()
+
 export const cardPopup = new PopupWithForm('.newcard_popup', (info) => {
   const data = {name: info.placename, link: info.link};
   api.pushCard(data).then((result) => {
@@ -74,20 +92,21 @@ const userInfo = new UserInfo(userInfoSelectors, api);
     });
 
   imageEditButton.addEventListener('click', () => {
+    formValidators['profile-photo'].resetValidation();
     avatarPopup.open();
   });
   editButton.addEventListener('click', () => {
+    formValidators['profile'].resetValidation();
     profilePopup.open();
     profilePopup.setInputValues({name: mainPageName.textContent, about: mainPageBio.textContent});
   });
   addCardButton.addEventListener('click', () => {
+    formValidators['newcard'].resetValidation();
     cardPopup.open();
   });
 
-  forms.forEach(form => {
-    let formValidator = new FormValidator(validationData, form);
-    formValidator.enableValidation();
-  });
 })();
+
+
 
 
