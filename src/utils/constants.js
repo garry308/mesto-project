@@ -16,7 +16,6 @@ export const validationData = {
 };
 export const editButton = page.querySelector('.profile__edit-button');
 export const imageEditButton = page.querySelector('.profile__photo-edit-button');
-export const forms = Array.from(document.forms);
 
 export const userInfoSelectors = {
   nameSelector : mainPageName, // '.profile__name'
@@ -36,3 +35,4 @@ export const cardSelectors = {
 };
 
 export const addCardButton = page.querySelector('.profile__add-button');
+export const formValidators = {};
