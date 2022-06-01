@@ -45,7 +45,7 @@ export class FormValidator {
     if (!inputElement.validity.valid) {
       this._showInputError(inputElement, inputElement.validationMessage);
     } else {
-      this._hideInputError(this._validationOptions, this._formElement, inputElement);
+      this._hideInputError(inputElement);
     }
   }
 

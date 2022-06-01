@@ -27,23 +27,35 @@ function enableValidation(validationData) {
     validator.enableValidation();
   })
 }
-console.log(formValidators);
-
 enableValidation(validationData);
 
 export const fsPopup = new PopupWithImage('.popup_fs');
 
-export const avatarPopup = new PopupWithForm('.profile-photo_popup', ({bio: avatar}) => {
-  userInfo.setUserAvatar({avatar});
-  avatarPopup.close();
-  setTimeout(() => avatarPopup.popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
+export const avatarPopup = new PopupWithForm('.profile-photo_popup', (data) => {
+  avatarPopup.renderSubmitter(true);
+  api.newImagePatch(data.bio)
+    .then((response) => {
+      userInfo.setUserInfo(response);
+      avatarPopup.close();
+    })
+    .catch((error) => console.log(`Error ${error}!!!`))
+    .finally(() => {
+      setTimeout(() => avatarPopup.renderSubmitter(false), 500)
+    });
 });
 avatarPopup.setEventListeners()
 
-export const profilePopup = new PopupWithForm('.profile_popup', (info) => {
-    userInfo.setUserInfo(info);
-    profilePopup.close();
-    setTimeout(() => profilePopup.popup.querySelector('.popup__save-button').textContent = "Сохранить", 500);
+export const profilePopup = new PopupWithForm('.profile_popup', (data) => {
+  profilePopup.renderSubmitter(true);
+  api.profileInfoPatch(data)
+    .then((response) => {
+      userInfo.setUserInfo(response);
+      profilePopup.close();
+    })
+    .catch((error) => console.log(`Error ${error}!!!`))
+    .finally(() => {
+      setTimeout(() => profilePopup.renderSubmitter(false), 500)
+    });
 });
 profilePopup.setEventListeners()
 
@@ -70,18 +82,18 @@ export const cardPopup = new PopupWithForm('.newcard_popup', (info) => {
     });
 });
 cardPopup.setEventListeners();
-const userInfo = new UserInfo(userInfoSelectors, api);
+
+
+const userInfo = new UserInfo(userInfoSelectors);
 
 (function () {
-  Promise.all([userInfo.getUserInfo(), api.getInitialCards()])
+  Promise.all([api.profileLoading(), api.getInitialCards()])
     .then(([userData, cards]) => {
       userInfo.setUserInfo(userData);
-      userInfo.setUserAvatar(userData);
-      const userId = userData.id;
       const cardsSection = new Section({
         items: cards,
         renderer: (card) => {
-          const newCard = new Card(card, cardSelectors, api, fsPopup, userId);
+          const newCard = new Card(card, cardSelectors, api, fsPopup, userInfo.getUserInfo().id);
           return newCard.getCard();
         }
       }, '.cards');
@@ -91,22 +103,22 @@ const userInfo = new UserInfo(userInfoSelectors, api);
       console.log(err);
     });
 
-  imageEditButton.addEventListener('click', () => {
-    formValidators['profile-photo'].resetValidation();
-    avatarPopup.open();
-  });
-  editButton.addEventListener('click', () => {
-    formValidators['profile'].resetValidation();
-    profilePopup.open();
-    profilePopup.setInputValues({name: mainPageName.textContent, about: mainPageBio.textContent});
-  });
-  addCardButton.addEventListener('click', () => {
-    formValidators['newcard'].resetValidation();
-    cardPopup.open();
-  });
+
 
 })();
 
-
+imageEditButton.addEventListener('click', () => {
+  formValidators['profile-photo'].resetValidation();
+  avatarPopup.open();
+});
+editButton.addEventListener('click', () => {
+  formValidators['profile'].resetValidation();
+  profilePopup.open();
+  profilePopup.setInputValues(userInfo.getUserInfo());
+});
+addCardButton.addEventListener('click', () => {
+  formValidators['newcard'].resetValidation();
+  cardPopup.open();
+});
 
 
