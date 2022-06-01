@@ -96,6 +96,7 @@ function enableValidation(validationData) {
     validator.enableValidation();
   })
 }
+
 function createCard(card) {
   const cardItem = new Card(card, cardSelectors, api, fsPopup, userInfo.getUserInfo().id);
   return cardItem.getCard();
