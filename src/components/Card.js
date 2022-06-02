@@ -1,5 +1,5 @@
 export default class Card {
-  constructor({link, name, _id, likes, owner}, selectors, api, fsPopup, userId) {
+  constructor({link, name, _id, likes, owner}, selectors, api, handleCardClick, userId) {
     this._api = api;
     this._link = link;
     this._name = name;
@@ -18,12 +18,11 @@ export default class Card {
     this._api = api;
     this._isLiked = false;
     this._userId = userId;
-    this._fsPopup = fsPopup;
+    this._handleCardClick = handleCardClick;
   }
   _setEventListeners() {
     this._cardImage.addEventListener('click', () => {
-      this._fsPopup.open(this._cardImage);
-      this._fsPopup.setEventListeners();
+      this._handleCardClick(this._name, this._link);
     });
     this._cardLike.addEventListener('click', (evt) => {
       this._toggleLike(evt);

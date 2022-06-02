@@ -59,6 +59,7 @@ const cardPopup = new PopupWithForm('.newcard_popup', (info) => {
 avatarPopup.setEventListeners();
 profilePopup.setEventListeners();
 cardPopup.setEventListeners();
+fsPopup.setEventListeners();
 
 (function () {
   Promise.all([api.profileLoading(), api.getInitialCards()])
@@ -87,6 +88,10 @@ addCardButton.addEventListener('click', () => {
   cardPopup.open();
 });
 
+function handleCardClick(name, link){
+  fsPopup.open(name, link);
+}
+
 function enableValidation(validationData) {
   const formList = Array.from(document.querySelectorAll(validationData.formList));
   formList.forEach((formElement) => {
@@ -98,6 +103,6 @@ function enableValidation(validationData) {
 }
 
 function createCard(card) {
-  const cardItem = new Card(card, cardSelectors, api, fsPopup, userInfo.getUserInfo().id);
+  const cardItem = new Card(card, cardSelectors, api, handleCardClick, userInfo.getUserInfo().id);
   return cardItem.getCard();
 }
