@@ -44,17 +44,17 @@
     <form name="profile" class="popup__container">
       <h2 class="popup__title">Редактировать профиль</h2>
       <fieldset class="popup__inputs">
-        <input type="text" class="popup__input popup__name" id="name" value="Имя профиля" minlength="2" maxlength="40" required>
+        <input type="text" class="popup__input popup__name" id="name" value="" placeholder="Имя профиля" minlength="2" maxlength="40" required>
         <span class="popup__input-error name-input-error">Текст ошибки</span>
-        <input type="text" class="popup__input popup__bio" id="bio" value="Описание профиля" minlength="2" maxlength="200" required>
-        <span class="popup__input-error bio-input-error">Текст ошибки</span>
+        <input type="text" class="popup__input popup__bio" id="about" value="" placeholder="Описание профиля" minlength="2" maxlength="200" required>
+        <span class="popup__input-error about-input-error">Текст ошибки</span>
         <button title="Cохранить изменения" type="submit" class="popup__save-button popup__save-button_active">Сохранить</button>
       </fieldset>
       <button title="Закрыть" type="button" class="popup__close-icon"></button>
     </form>
   </div>
   <div class="popup newcard_popup">
-    <form name="addcard" class="popup__container">
+    <form name="newcard" class="popup__container">
       <h2 class="popup__title">Новое место</h2>
       <fieldset class="popup__inputs">
         <input type="text" class="popup__input popup__name" id="placename" value="" placeholder="Название" minlength="2" maxlength="30" required>
@@ -74,7 +74,7 @@
     </div>
   </div>
   <div class="popup profile-photo_popup">
-    <form name="image" class="popup__container popup__container_photo">
+    <form name="profile-photo" class="popup__container popup__container_photo">
       <h2 class="popup__title">Обновить аватар</h2>
       <fieldset class="popup__inputs">
         <input type="url" class="popup__input popup__bio" id="bio" placeholder="Ссылка на фото" minlength="2" maxlength="200" required>
